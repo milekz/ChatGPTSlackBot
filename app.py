@@ -47,6 +47,21 @@ def event_test(event, say):
 
     # reply message to new message
     say(send)
+    
+@app.command("/gpt")
+def handle_some_command(ack, say , command):
+    ack()
+    prompt = re.sub('\\s<@[^, ]*|^<@[^, ]*', '', command['text'] )
+    try:
+        response = chatbot.ask(prompt)
+        #user = event['user']
+        send = response
+    except Exception as e:
+        print(e)
+        send = "We're experiencing exceptionally high demand. Please, try again."
+
+    # reply message to new message
+    say( 'Q: '+command['text']+'\n'+send)
 
 def chatgpt_refresh():
     while True:
